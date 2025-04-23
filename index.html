@@ -21,6 +21,8 @@
     <button onclick="saveName()">Google Drive에 저장</button>
     <p id="result"></p>
   </div>
+  <button onclick="loadName()">Google Drive에서 이름 불러오기</button>
+<ul id="name-list"></ul>
 
   <script>
     let accessToken = null;
@@ -75,6 +77,46 @@
         document.getElementById("result").innerText = "❌ 에러 발생: " + err.message;
       });
     }
+
+    function loadName() {
+  // 1. Drive에서 "user_name.json" 파일 검색
+  fetch("https://www.googleapis.com/drive/v3/files?q=name='user_name.json' and trashed=false", {
+    headers: {
+      Authorization: "Bearer " + accessToken
+    }
+  })
+  .then(res => res.json())
+  .then(fileList => {
+    if (!fileList.files || fileList.files.length === 0) {
+      document.getElementById("result").innerText = "❌ 저장된 파일이 없습니다.";
+      return;
+    }
+
+    const fileId = fileList.files[0].id;
+
+    // 2. 파일 내용을 읽기
+    return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+      headers: {
+        Authorization: "Bearer " + accessToken
+      }
+    });
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data && data.name) {
+      const ul = document.getElementById("name-list");
+      ul.innerHTML = ""; // 기존 목록 초기화
+      const li = document.createElement("li");
+      li.innerText = `👤 이름: ${data.name}`;
+      ul.appendChild(li);
+    }
+  })
+  .catch(err => {
+    console.error("불러오기 실패:", err);
+    document.getElementById("result").innerText = "❌ 불러오기 실패: " + err.message;
+  });
+}
   </script>
+  
 </body>
 </html>
