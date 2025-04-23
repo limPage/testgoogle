@@ -26,8 +26,8 @@
       method: "POST",
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: new URLSearchParams({
-        client_id: "504615460563-q2j04qmu1ii672mvfd5ripbq4dta0cv2.apps.googleusercontent.com",
-        client_secret: "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",
+        client_id: "504615460563-i0mbebb61nkj5h2k1gafpqvti54qangl.apps.googleusercontent.com",
+        client_secret: "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",
         grant_type: "authorization_code",
         code: response.code,  // 이 부분은 OAuth 코드 흐름에서 필요. 간소화 위해 생략함.
         redirect_uri: window.location.origin
@@ -41,7 +41,7 @@
 
   window.onload = () => {
     google.accounts.id.initialize({
-      client_id: "504615460563-q2j04qmu1ii672mvfd5ripbq4dta0cv2.apps.googleusercontent.com",
+      client_id: "504615460563-i0mbebb61nkj5h2k1gafpqvti54qangl.apps.googleusercontent.com",
       callback: onGoogleSignIn
     });
     google.accounts.id.renderButton(
